@@ -1,6 +1,7 @@
 #include "../inc/logger.hpp"
 #include <iostream>
 #include <ctime>
+#include <mutex>
 
 Logger::Logger(const std::string& filename, MessageLevel minLevel)
     : logFile_(filename, std::ios::app), default_level_(minLevel) {

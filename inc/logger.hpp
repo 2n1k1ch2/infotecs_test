@@ -1,14 +1,14 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include <mutex>
 #include <chrono>
-#include <iomanip>
+
 
 enum class MessageLevel {
     DEBUG,
     INFO,
-    ERROR
+    ERROR,
+    INVALID
 };
 
 class Logger {

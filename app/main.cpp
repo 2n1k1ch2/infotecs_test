@@ -5,7 +5,6 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include <algorithm>
 #include "../inc/logger.hpp"
 
 class LogQueue {
@@ -77,8 +76,21 @@ std::pair<std::string, MessageLevel> extractMessageAndLevel(const std::string& i
     
     return {input, MessageLevel::INVALID};
 }
-
-int main( ) {
+MessageLevel parseLevel(const std::string& levelStr) {
+    if (levelStr == "DEBUG") return MessageLevel::DEBUG;
+    if (levelStr == "INFO") return MessageLevel::INFO;
+    if (levelStr == "ERROR") return MessageLevel::ERROR;
+    std::cerr << "Unknown level. Defaulting to INFO\n";
+    return MessageLevel::INFO;
+}
+int main(int argc, char* argv[]) {
+    
+    if (argc != 3) {
+        std::cerr << "Неправильное кол-во аргументов , должно быть 2 ";
+        return 1;
+    }
+    const std::string logfile = argv[1];
+    const MessageLevel default_level = parseLevel(argv[2]);
 
     Logger logger("log.txt", MessageLevel::INFO);
     LogQueue logQueue;

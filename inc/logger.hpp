@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <chrono>
-
+#include <mutex>
 
 enum class MessageLevel {
     DEBUG,

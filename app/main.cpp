@@ -6,7 +6,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "../inc/logger.hpp"
-
+#include <algorithm>
 class LogQueue {
     std::queue<std::pair<std::string, MessageLevel>> queue_;
     std::mutex mutex_;

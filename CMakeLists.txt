@@ -42,6 +42,7 @@ target_link_libraries(statisticapp PRIVATE logger_static)
 enable_testing()
 
 add_executable(logger_tests
+    test/test_main.cpp
     test/test_logger.cpp
     src/logger.cpp
     src/logqueue.cpp

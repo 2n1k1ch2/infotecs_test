@@ -1,8 +1,6 @@
-#include "../inc/utils.hpp"
-#include "../inc/logger.hpp"
-#include <string>
-#include <algorithm>
-#include <iostream>
+#include "utils.hpp"
+#include "logger.hpp"
+
 
 
 bool isValidLevel(const std::string& word) {
@@ -36,4 +34,12 @@ MessageLevel parseLevel(const std::string& levelStr) {
     if (levelStr == "ERROR") return MessageLevel::ERROR;
     std::cerr << "Unknown level. Defaulting to INFO\n";
     return MessageLevel::INFO;
+}
+std::string levelToString(MessageLevel level) {
+    switch (level) {
+        case MessageLevel::DEBUG: return "DEBUG";
+        case MessageLevel::INFO:  return "INFO";
+        case MessageLevel::ERROR: return "ERROR";
+        default: return "UNKNOWN";
+    }
 }

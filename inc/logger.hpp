@@ -25,5 +25,5 @@ private:
     MessageLevel default_level_;
     std::mutex logMutex_;
 
-    std::string levelToString(MessageLevel level);
+    
 };

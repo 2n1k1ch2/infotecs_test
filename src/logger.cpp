@@ -1,4 +1,5 @@
-#include "../inc/logger.hpp"
+#include "logger.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <ctime>
 #include <mutex>
@@ -42,11 +43,3 @@ void Logger::change_level(MessageLevel newLevel) {
     default_level_ = newLevel;
 }
 
-std::string Logger::levelToString(MessageLevel level) {
-    switch (level) {
-        case MessageLevel::DEBUG: return "DEBUG";
-        case MessageLevel::INFO:  return "INFO";
-        case MessageLevel::ERROR: return "ERROR";
-        default: return "UNKNOWN";
-    }
-}

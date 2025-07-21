@@ -1,23 +1,24 @@
-#include "../inc/socket_logger.hpp"
+#include "socket_logger.hpp"
+#include "utils.hpp"
 #include <chrono>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 
 SocketLogger::SocketLogger(const std::string& host, int port,MessageLevel level) 
-    : host(host), port(port),default_level_(level),socket_fd(-1) {
+    : host_(host), port_(port),default_level_(level),socketFd_(-1) {
     connect();
 }
 
 SocketLogger::~SocketLogger() {
-    if (socket_fd != -1) {
-        close(socket_fd);
+    if (socketFd_ != -1) {
+        close(socketFd_);
     }
 }
 
 void SocketLogger::connect() {
-    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_fd == -1) {
+    socketFd_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (socketFd_ == -1) {
         throw std::runtime_error("Failed to create socket");
     }
 
@@ -25,21 +26,21 @@ void SocketLogger::connect() {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(port_);
 
-    if (inet_pton(AF_INET, host.c_str(), &server_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, host_.c_str(), &server_addr.sin_addr) <= 0) {
         throw std::runtime_error("Invalid address");
     }
 
-    if (::connect(socket_fd_, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+    if (::connect(socketFd_, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
         throw std::runtime_error("Connection failed");
     }
 }
 
 void SocketLogger::log(const std::string& msg, MessageLevel level) {
      if(level<default_level_) {
-        return 
+        return ;
     }
-    std::lock_guard<std::mutex> lock(socket_mutex);
-    if (socket_fd == -1) {
+    std::lock_guard<std::mutex> lock(socket_mutex_);
+    if (socketFd_ == -1) {
         throw std::runtime_error("Socket is not connected");
     }
 
@@ -47,18 +48,18 @@ void SocketLogger::log(const std::string& msg, MessageLevel level) {
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
     std::ostringstream oss;
     oss << std::put_time(std::localtime(&now_c), "%F %T") 
-        << " [" << MessageNames[static_cast<int>(level)] << "] " 
+        << " [" << levelToString(level) << "] " 
         << msg << "\n";
 
     std::string log_msg = oss.str();
-    if (send(socket_fd, log_msg.c_str(), log_msg.size(), 0) < 0) {
+    if (send(socketFd_, log_msg.c_str(), log_msg.size(), 0) < 0) {
         throw std::runtime_error("Failed to send message");
     }
 }
 void SocketLogger::log(const std::string&msg){
-    std::lock_guard<std::mutex> lock(socket_mutex);
-    log(msg,default_level);
+    std::lock_guard<std::mutex> lock(socket_mutex_);
+    log(msg,default_level_);
 }
-void SocketLogger::change_default_level(MessageLevel new_level){
+void SocketLogger::change_level(MessageLevel new_level){
     default_level_=new_level;
 }

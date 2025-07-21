@@ -1,11 +1,13 @@
 #pragma once
-
+#include <iostream>
 #include <string>
 #include <vector>
-struct TestCase{
+
+struct TestCase {
     std::string name;
     void (*test_func)();
 };
+
 class TestRunner {
 public:
     static void register_test(const std::string& name, void (*test_func)()) {

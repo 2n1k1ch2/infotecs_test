@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 struct TestCase{
     std::string name;
     void (*test_func)();

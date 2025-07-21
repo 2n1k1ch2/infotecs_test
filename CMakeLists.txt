@@ -30,14 +30,6 @@ target_include_directories(loggerapp PRIVATE inc)
 
 target_link_libraries(loggerapp PRIVATE logger_static)
 
-#Часть №3 
-add_executable( statisticapp
-    app/task3.cpp
-    src/utils.cpp
-    src/socket_logger.cpp
-)
-target_include_directories(statisticapp PRIVATE inc)
-target_link_libraries(statisticapp PRIVATE logger_static)
 
 enable_testing()
 
@@ -47,7 +39,6 @@ add_executable(logger_tests
     src/logger.cpp
     src/logqueue.cpp
     src/utils.cpp
-    src/socket_logger.cpp
 )
 target_include_directories(logger_tests PRIVATE inc)
 target_link_libraries(logger_tests PRIVATE logger_static)
@@ -62,4 +53,3 @@ add_custom_command(TARGET logger_tests POST_BUILD
 
 # Указываем, что тесты должны проходить перед сборкой основных целей
 add_dependencies(loggerapp logger_tests)
-add_dependencies(statisticapp logger_tests)

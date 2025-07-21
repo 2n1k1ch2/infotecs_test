@@ -4,17 +4,17 @@ project(LoggerLib)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#
+#Статическая библиотека
 add_library(logger_static STATIC 
     src/logger.cpp
-    src/socket_logger.cpp  # Добавляем новый файл
+    src/socket_logger.cpp
 )
 target_include_directories(logger_static PUBLIC inc)
 
 # Динамическая библиотека
 add_library(logger_shared SHARED 
     src/logger.cpp
-    src/socket_logger.cpp  # Добавляем новый файл
+    src/socket_logger.cpp  
 )
 target_include_directories(logger_shared PUBLIC inc)
 set_target_properties(logger_shared PROPERTIES OUTPUT_NAME "logger")
@@ -31,10 +31,34 @@ target_include_directories(loggerapp PRIVATE inc)
 target_link_libraries(loggerapp PRIVATE logger_static)
 
 #Часть №3 
-add_executable(task3 
+add_executable( statisticapp
     app/task3.cpp
     src/utils.cpp
     src/socket_logger.cpp
 )
-target_include_directories(task3 PRIVATE inc)
-target_link_libraries(task3 PRIVATE logger_static)
+target_include_directories(statisticapp PRIVATE inc)
+target_link_libraries(statisticapp PRIVATE logger_static)
+
+enable_testing()
+
+add_executable(logger_tests
+    test/test_logger.cpp
+    src/logger.cpp
+    src/logqueue.cpp
+    src/utils.cpp
+    src/socket_logger.cpp
+)
+target_include_directories(logger_tests PRIVATE inc)
+target_link_libraries(logger_tests PRIVATE logger_static)
+
+add_test(NAME logger_tests COMMAND logger_tests)
+
+# запуск тестов после компиляции
+add_custom_command(TARGET logger_tests POST_BUILD
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+# Указываем, что тесты должны проходить перед сборкой основных целей
+add_dependencies(loggerapp logger_tests)
+add_dependencies(statisticapp logger_tests)

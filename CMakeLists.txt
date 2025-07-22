@@ -7,14 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Статическая библиотека
 add_library(logger_static STATIC 
     src/logger.cpp
-    src/socket_logger.cpp
 )
 target_include_directories(logger_static PUBLIC inc)
 
 # Динамическая библиотека
 add_library(logger_shared SHARED 
-    src/logger.cpp
-    src/socket_logger.cpp  
+    src/logger.cpp  
 )
 target_include_directories(logger_shared PUBLIC inc)
 set_target_properties(logger_shared PROPERTIES OUTPUT_NAME "logger")

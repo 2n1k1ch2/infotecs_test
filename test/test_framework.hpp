@@ -16,7 +16,10 @@ public:
 
     static int run_all() {
         int failed = 0;
-        for (const auto& test : tests()) {
+        const auto& all_tests = tests();
+        const int total_tests = all_tests.size();
+
+        for (const auto& test : all_tests) {
             std::cout << "[ RUN      ] " << test.name << std::endl;
             try {
                 test.test_func();
@@ -26,6 +29,15 @@ public:
                 failed++;
             }
         }
+
+        // Вывод итоговой статистики
+        std::cout << "\n[==========] " << total_tests << " tests ran.\n";
+        std::cout << "[  PASSED  ] " << (total_tests - failed) << " tests.\n";
+        if (failed > 0) {
+            std::cerr << "[  FAILED  ] " << failed << " tests.\n";
+        }
+
+        // Возвращаем количество упавших тестов (0 = успех)
         return failed;
     }
 

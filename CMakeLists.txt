@@ -34,8 +34,9 @@ target_link_libraries(loggerapp PRIVATE logger_static)
 enable_testing()
 
 add_executable(logger_tests
-    test/test_main.cpp
     test/test_logger.cpp
+    test/test_utils.cpp
+    test/test_main.cpp
     src/logger.cpp
     src/logqueue.cpp
     src/utils.cpp

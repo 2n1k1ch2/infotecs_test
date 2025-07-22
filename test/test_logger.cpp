@@ -44,27 +44,8 @@ TEST(Logger_WriteLogSuccess) {
     file.close();
     std::remove(filename.c_str());
 }
-//Тест на работоспособности очереди
-// TEST(LogQueue_BasicOperations) {
-//     std::cout<<"TEST: LogQueue_BasicOperations";
-//     LogQueue queue;
-//     queue.push("test1", MessageLevel::INFO);
-//     queue.push("test2", MessageLevel::DEBUG);
-    
-//     std::pair<std::string, MessageLevel> item;
-//     if (!queue.pop(item) || item.first != "test1") {
-//         throw std::runtime_error("First item mismatch");
-//     }
-    
-//     if (!queue.pop(item) || item.first != "test2") {
-//         throw std::runtime_error("Second item mismatch");
-//     }
-    
-//     if (queue.pop(item)) {
-//         throw std::runtime_error("Queue should be empty");
-//     }
-// }
-//Тест на конкурентность
+/*Тест на конкурентность , 2 логгера пишут в один тестовый лог ,
+ если кол-во сообщений != MESSAGE_PER_LOGGER * Кол-во логгеров -> ошибка*/
 TEST(Concurrency_Test) {
     const std::string logfile = "concurrency_test.log";
     const int MESSAGES_PER_LOGGER = 1000;

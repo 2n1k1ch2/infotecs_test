@@ -1,5 +1,5 @@
 #include <logqueue.hpp>
-
+//Потокобезопасная очередь для записи в log file 
 void LogQueue::push(const std::string& message, MessageLevel level) {
     std::lock_guard<std::mutex> lock(mutex_);
     queue_.emplace(message, level);
